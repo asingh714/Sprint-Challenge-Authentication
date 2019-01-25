@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-class Users extends Component {
+class Jokes extends Component {
   state = {
-    users: []
+    jokes: []
   };
 
   componentDidMount() {
@@ -19,9 +19,8 @@ class Users extends Component {
     axios
       .get(endpoint, requestOptions)
       .then(response => {
-        console.log(response.data);
         this.setState({
-          user: response.data.users
+          jokes: response.data
         });
       })
       .catch(err => console.log(err));
@@ -31,9 +30,9 @@ class Users extends Component {
     return (
       <>
         <h2>Here are some jokes:</h2>
-        {this.state.users.map(user => (
-          <div className="box" key={user.id}>
-            <p>Joke: {user.joke}</p>
+        {this.state.jokes.map(joke => (
+          <div className="box" key={joke.id}>
+            <p>{joke.joke}</p>
           </div>
         ))}
       </>
@@ -41,4 +40,4 @@ class Users extends Component {
   }
 }
 
-export default Users;
+export default Jokes;
