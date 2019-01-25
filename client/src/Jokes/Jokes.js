@@ -27,16 +27,20 @@ class Jokes extends Component {
   }
 
   render() {
-    return (
-      <>
-        <h2>Here are some jokes:</h2>
-        {this.state.jokes.map(joke => (
-          <div className="box" key={joke.id}>
-            <p>{joke.joke}</p>
-          </div>
-        ))}
-      </>
-    );
+    if (this.state.jokes.length > 0) {
+      return (
+        <>
+          <h2>Here are some jokes:</h2>
+          {this.state.jokes.map(joke => (
+            <div className="box" key={joke.id}>
+              <p>{joke.joke}</p>
+            </div>
+          ))}
+        </>
+      );
+    } else {
+      return <h2>There are no jokes at the moment:</h2>;
+    }
   }
 }
 

@@ -53,4 +53,9 @@ input {
 
 nav {
   margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+h2 {
+  margin-bottom: 2rem;
 }
