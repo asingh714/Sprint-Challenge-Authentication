@@ -34,7 +34,7 @@ class SignUp extends React.Component {
     return (
       <>
         <h2>Sign Up</h2>
-        <form onSubmit={this.handleRegister}>
+        <form onSubmit={this.handleRegister} className="form">
           <input
             name="username"
             onChange={this.handleChange}
@@ -49,7 +49,7 @@ class SignUp extends React.Component {
             type="password"
             value={this.state.password}
           />
-          <button>Register</button>
+          <button>Sign Up</button>
         </form>
       </>
     );

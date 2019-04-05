@@ -12,3 +12,40 @@ body {
   font-size: 1.6rem;
   box-sizing: border-box;
 }
+
+nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 50rem;
+  margin: 2rem auto;
+}
+
+a {
+  text-decoration: none;
+}
+
+h1, h2 {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 40rem;
+  border: 1px solid #ddd;
+  padding: 2rem;
+  margin: 0 auto;
+}
+
+input {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+button {
+  padding: 1rem;
+}
+
+
