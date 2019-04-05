@@ -42,7 +42,30 @@ function register(req, res) {
 }
 
 function login(req, res) {
-  // implement user login
+  const credentials = req.body;
+
+  if (!credentials.username || !credentials.password) {
+    res.status(400).json({
+      error: "Please provide a username and password."
+    });
+  } else {
+    UsersDB("users")
+    .where({ username: credentials.username })
+    .first()
+    .then(user => {
+      if (user && bcrypt.compareSync(credentials.password, user.password)) {
+        const token = tokenService.generateToken(user)
+        res.status(200).json({ message: `${user.username} is logged in.`, token })
+      } else {
+        res.status(401).json({ message: "Invalid credentials" })
+      }
+    })
+    .catch(error => {
+      res.status(500).json({
+        error: "There was an error while logging in."
+      })
+    })
+  }
 }
 
 function getJokes(req, res) {
