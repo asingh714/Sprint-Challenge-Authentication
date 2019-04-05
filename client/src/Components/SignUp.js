@@ -15,7 +15,7 @@ class SignUp extends React.Component {
     });
   };
 
-  handleSubmit = event => {
+  handleRegister = event => {
     event.preventDefault();
 
     const endpoint = "http://localhost:5000/api/register";
@@ -34,7 +34,7 @@ class SignUp extends React.Component {
     return (
       <>
         <h2>Sign Up</h2>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleRegister}>
           <input
             name="username"
             onChange={this.handleChange}
