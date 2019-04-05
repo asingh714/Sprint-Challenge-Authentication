@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import Nav from "./Components/Nav"
+import Routes from "./Components/Routes"
 
 class App extends Component {
   render() {
     return (
       <div>
-        <h1>test</h1>
+        <Nav />
+        <Routes />
       </div>
     );
   }
