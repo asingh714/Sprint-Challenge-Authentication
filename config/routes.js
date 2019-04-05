@@ -1,9 +1,9 @@
 const axios = require("axios");
 const bcrypt = require("bcryptjs");
 
-const { authenticate, generateToken } = require("../auth/authenticate");
-
-const db = require("../database/dbConfig");
+const { authenticate } = require("../auth/authenticate");
+const UsersDB = require("../database/dbConfig");
+const tokenService = require("../auth/token-service");
 
 module.exports = server => {
   server.post("/api/register", register);
@@ -12,48 +12,60 @@ module.exports = server => {
 };
 
 function register(req, res) {
-  const userInfo = req.body;
+  const user = req.body;
 
-  const hash = bcrypt.hashSync(userInfo.password, 14);
-
-  userInfo.password = hash;
-
-  db("users")
-    .insert(userInfo)
-    .then(id => {
-      db("users")
-        .where({ username: userInfo.username })
-        .select("id", "username")
-        .first()
-        .then(user => {
-          let token = generateToken(user);
-          res.status(201).json({ user, token });
-        });
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .json({ error: "There was an error while creating the user. " });
+  if (!user.username || !user.password) {
+    res.status(400).json({
+      error: "Please provide a username and password."
     });
+  } else {
+    const hash = bcrypt.hashSync(user.password, 10);
+    user.password = hash;
+    UsersDB("users")
+      .insert(user)
+      .then(ids => {
+        const id = ids[0];
+        UsersDB("users")
+          .where({ id })
+          .first()
+          .then(user => {
+            const token = tokenService.generateToken(user);
+            res.status(201).json({ user, token });
+          });
+      })
+      .catch(error => {
+        res.status(500).json({
+          error: "There was an error while saving the user to the database."
+        });
+      });
+  }
 }
 
 function login(req, res) {
   const credentials = req.body;
 
-  db("users")
+  if (!credentials.username || !credentials.password) {
+    res.status(400).json({
+      error: "Please provide a username and password."
+    });
+  } else {
+    UsersDB("users")
     .where({ username: credentials.username })
     .first()
     .then(user => {
       if (user && bcrypt.compareSync(credentials.password, user.password)) {
-        const token = generateToken(user);
-        res
-          .status(200)
-          .json({ message: `${user.username} is logged in`, token });
+        const token = tokenService.generateToken(user)
+        res.status(200).json({ message: `${user.username} is logged in.`, token })
       } else {
-        res.status(401).json({ message: "Sorry you are not authorized." });
+        res.status(401).json({ message: "Invalid credentials" })
       }
     })
-    .catch(err => res.status(500).json(err));
+    .catch(error => {
+      res.status(500).json({
+        error: "There was an error while logging in."
+      })
+    })
+  }
 }
 
 function getJokes(req, res) {
